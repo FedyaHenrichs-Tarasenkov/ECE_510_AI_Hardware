@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.vcd
+*.sim
+sim
+.DS_Store
