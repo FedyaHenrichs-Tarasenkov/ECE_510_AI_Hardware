@@ -1,4 +1,4 @@
-# ECE 410/510 Spring 2026 - Codefest 1
+# ECE 510 Spring 2026 
 
 **Name:** Fedya Henrichs-Tarasenkov
 
