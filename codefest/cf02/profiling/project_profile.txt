@@ -1,0 +1,38 @@
+         55243 function calls (55047 primitive calls) in 0.434 seconds
+
+   Ordered by: cumulative time
+   List reduced from 272 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.077    0.077    0.434    0.434 /Users/nina/Documents/ECE_510/scripts/profile_hdc.py:13(run_workload)
+        1    0.000    0.000    0.223    0.223 /Users/nina/Documents/ECE_510/.venv/lib/python3.11/site-packages/numpy/__init__.py:704(__getattr__)
+     25/1    0.000    0.000    0.223    0.223 <frozen importlib._bootstrap>:1167(_find_and_load)
+     25/1    0.000    0.000    0.223    0.223 <frozen importlib._bootstrap>:1122(_find_and_load_unlocked)
+     25/1    0.000    0.000    0.223    0.223 <frozen importlib._bootstrap>:666(_load_unlocked)
+      9/1    0.000    0.000    0.223    0.223 <frozen importlib._bootstrap_external>:934(exec_module)
+     68/2    0.000    0.000    0.222    0.111 <frozen importlib._bootstrap>:233(_call_with_frames_removed)
+      9/1    0.000    0.000    0.222    0.222 {built-in method builtins.exec}
+        1    0.000    0.000    0.222    0.222 /Users/nina/Documents/ECE_510/.venv/lib/python3.11/site-packages/numpy/random/__init__.py:1(<module>)
+        1    0.000    0.000    0.222    0.222 <frozen importlib._bootstrap>:1209(_handle_fromlist)
+        2    0.000    0.000    0.222    0.111 {built-in method builtins.__import__}
+     16/6    0.000    0.000    0.173    0.029 <frozen importlib._bootstrap_external>:1239(exec_module)
+     16/6    0.071    0.004    0.173    0.029 {built-in method _imp.exec_dynamic}
+    50000    0.133    0.000    0.133    0.000 /Users/nina/Documents/ECE_510/scripts/profile_hdc.py:9(hdc_bind_kernel)
+       25    0.000    0.000    0.113    0.005 <frozen importlib._bootstrap>:566(module_from_spec)
+       16    0.000    0.000    0.111    0.007 <frozen importlib._bootstrap_external>:1231(create_module)
+       16    0.111    0.007    0.111    0.007 {built-in method _imp.create_dynamic}
+        1    0.000    0.000    0.107    0.107 /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/secrets.py:1(<module>)
+        1    0.000    0.000    0.084    0.084 /Users/nina/Documents/ECE_510/.venv/lib/python3.11/site-packages/numpy/random/_pickle.py:1(<module>)
+        1    0.000    0.000    0.075    0.075 /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/hmac.py:1(<module>)
+        9    0.000    0.000    0.021    0.002 <frozen importlib._bootstrap_external>:1007(get_code)
+        9    0.000    0.000    0.019    0.002 <frozen importlib._bootstrap_external>:1127(get_data)
+        9    0.018    0.002    0.018    0.002 {method 'read' of '_io.BufferedReader' objects}
+        1    0.000    0.000    0.010    0.010 /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/random.py:1(<module>)
+        1    0.000    0.000    0.009    0.009 /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/hashlib.py:1(<module>)
+       14    0.000    0.000    0.009    0.001 /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/hashlib.py:126(__get_openssl_constructor)
+        1    0.000    0.000    0.008    0.008 /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/base64.py:1(<module>)
+       25    0.002    0.000    0.006    0.000 <frozen importlib._bootstrap>:1056(_find_spec)
+        1    0.006    0.006    0.006    0.006 {built-in method _hashlib.openssl_md5}
+       25    0.000    0.000    0.004    0.000 <frozen importlib._bootstrap_external>:1496(find_spec)
+
+

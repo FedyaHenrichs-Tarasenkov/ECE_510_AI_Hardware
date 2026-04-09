@@ -1,0 +1,9 @@
+### HW/SW Partition Proposal
+
+**(a) Hardware Acceleration Target:** I will accelerate the Hyperdimensional Computing (HDC) binding and bundling kernels (vector XOR and accumulation). The roofline analysis strongly supports this: at 0.0833 OPs/byte, HDC is severely memory-bound on a standard CPU. By moving this kernel to custom hardware, we can process the massive 10,000-bit vectors using highly parallelized physical XOR gates and local on-chip SRAM, drastically increasing performance.
+
+**(b) Software Baseline Responsibilities:** The host CPU (software baseline) will continue to handle sensor data ingestion and initial feature extraction. It will convert raw, real-world data into the initial dense vectors before sending them over the bus to the hardware accelerator for the heavy lifting of classification.
+
+**(c) Interface Bandwidth:** To prevent the accelerator from becoming interface-bound, the SPI or AXI4-Lite bus must be capable of streaming the encoded feature vectors fast enough to keep the XOR arrays fed. Given that a single 10,000-dimension vector is roughly 40KB, a standard SPI running at 50 Mbps can transfer it in less than 10 milliseconds, which is sufficient for edge/wearable audio or biosignal sampling rates. 
+
+**(d) Bottleneck Shifts:** Currently, the kernel is heavily memory-bound on my CPU due to DRAM bandwidth constraints. By moving the base Item Memory directly onto the chiplet (SRAM) and streaming only the input vectors, the accelerator design effectively eliminates the DRAM bottleneck. Depending on the final clock speed and interface width, the custom accelerator is expected to shift the workload closer to the ridge point, making it compute-bound (limited by the number of parallel XOR gates we can physically fit on the silicon).
