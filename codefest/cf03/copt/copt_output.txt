@@ -1,0 +1,5 @@
+Device found: Tesla T4
+Network successfully built and moved to GPU.
+Input tensor generated with shape: [16, 4] on cuda:0
+Output tensor shape: [16, 1] (Expected: [16, 1])
+Output is on device: cuda:0
