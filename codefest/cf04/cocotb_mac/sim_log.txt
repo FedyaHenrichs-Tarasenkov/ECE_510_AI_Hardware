@@ -1,0 +1,45 @@
+(.venv) (base) MacBook-Pro-Nina:cocotb_mac nina$ make SIM=icarus
+rm -f results.xml
+"/Applications/Xcode.app/Contents/Developer/usr/bin/make" -f Makefile results.xml
+/Users/nina/Documents/ECE_510/.venv/lib/python3.11/site-packages/cocotb_tools/makefiles/simulators/Makefile.icarus:65: Using MODULE is deprecated, please use COCOTB_TEST_MODULES instead.
+rm -f results.xml
+COCOTB_TEST_MODULES=test_mac COCOTB_TESTCASE= COCOTB_TEST_FILTER= COCOTB_TOPLEVEL=mac TOPLEVEL_LANG=verilog \
+         /usr/local/bin/vvp -M /Users/nina/Documents/ECE_510/.venv/lib/python3.11/site-packages/cocotb/libs -m libcocotbvpi_icarus   sim_build/sim.vvp -fst  
+     -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:94   in _embed_init_python              Using Python 3.11.9 interpreter at /Users/nina/Documents/ECE_510/.venv/bin/python3.11
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:79   in gpi_print_registered_impl       VPI registered
+     0.00ns INFO     cocotb                             Running on Icarus Verilog version 13.0 (stable)
+     0.00ns INFO     cocotb                             Seeding Python random module with 1777170293
+     0.00ns INFO     cocotb                             Initialized cocotb v2.0.1 from /Users/nina/Documents/ECE_510/.venv/lib/python3.11/site-packages/cocotb
+     0.00ns INFO     cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+     0.00ns INFO     cocotb                             Running tests
+     0.00ns INFO     cocotb.regression                  running test_mac.test_mac_basic (1/2)
+                                                            Basic functional test based on the professor's minimal code.
+     0.00ns WARNING  py.warnings                        /Users/nina/Documents/ECE_510/codefest/cf04/cocotb_mac/test_mac.py:8: DeprecationWarning: The 'units' argument has been renamed to 'unit'.
+                                                          cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
+                                                        
+FST info: dumpfile sim_build/mac.fst opened for output.
+    15.00ns WARNING  py.warnings                        /Users/nina/Documents/ECE_510/codefest/cf04/cocotb_mac/test_mac.py:22: DeprecationWarning: `logic_array.signed_integer` getter is deprecated. Use `logic_array.to_signed()` instead.
+                                                          assert dut.out.value.signed_integer == expected
+                                                        
+    45.00ns WARNING  py.warnings                        /Users/nina/Documents/ECE_510/codefest/cf04/cocotb_mac/test_mac.py:27: DeprecationWarning: `logic_array.signed_integer` getter is deprecated. Use `logic_array.to_signed()` instead.
+                                                          assert dut.out.value.signed_integer == 0
+                                                        
+    45.00ns INFO     cocotb.regression                  test_mac.test_mac_basic passed
+    45.00ns INFO     cocotb.regression                  running test_mac.test_mac_overflow (2/2)
+                                                            Task 2: Overflow test to check if it wraps.
+    45.00ns WARNING  py.warnings                        /Users/nina/Documents/ECE_510/codefest/cf04/cocotb_mac/test_mac.py:32: DeprecationWarning: The 'units' argument has been renamed to 'unit'.
+                                                          cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
+                                                        
+1331550.00ns WARNING  py.warnings                        /Users/nina/Documents/ECE_510/codefest/cf04/cocotb_mac/test_mac.py:47: DeprecationWarning: `logic_array.signed_integer` getter is deprecated. Use `logic_array.to_signed()` instead.
+                                                           final_val = dut.out.value.signed_integer
+                                                         
+1331550.00ns INFO     cocotb.regression                  test_mac.test_mac_overflow passed
+1331550.00ns INFO     cocotb.regression                  **************************************************************************************
+                                                         ** TEST                          STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                         **************************************************************************************
+                                                         ** test_mac.test_mac_basic        PASS          45.00           0.03       1660.94  **
+                                                         ** test_mac.test_mac_overflow     PASS     1331505.00          11.04     120597.37  **
+                                                         **************************************************************************************
+                                                         ** TESTS=2 PASS=2 FAIL=0 SKIP=0            1331550.00          11.08     120130.45  **
+                                                         **************************************************************************************
+                                                         
