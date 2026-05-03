@@ -1,0 +1,5 @@
+--- Starting AXI4-Lite Interface Test ---
+DUT Read Data: beefcafe | Expected: beefcafe
+RESULT: PASS
+--- Simulation Complete ---
+tb_interface.sv:109: $finish called at 175000 (1ps)

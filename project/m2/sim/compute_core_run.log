@@ -1,0 +1,6 @@
+VCD info: dumpfile compute_core.vcd opened for output.
+--- Starting HDC Binding Test ---
+DUT Output: aaaaaaaa | Expected: aaaaaaaa
+RESULT: PASS
+--- Simulation Complete ---
+tb_compute_core.sv:96: $finish called at 185000 (1ps)
