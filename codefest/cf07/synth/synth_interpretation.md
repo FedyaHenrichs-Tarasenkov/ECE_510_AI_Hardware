@@ -1,16 +1,16 @@
 # CF07 Synthesis Interpretation: HDC Compute Core
 
 **(a) Clock Period and Slack:**
-The synthesis was targeted at a 10.0 ns clock period (100 MHz) to match the AXI4-Lite bus specification. The design easily met timing, yielding a massive positive slack. The worst-case delay from the Yosys synthesis mapping was only ~1.03 ns, leaving roughly +8.97 ns of setup slack, meaning the highly parallel combinational logic is extremely fast.
+The synthesis was targeted at a 10.0 ns clock period (100 MHz) to match the AXI4-Lite bus specification. The design easily met timing, yielding a massive positive slack. The worst-case delay from the Yosys synthesis mapping was only ~1.03 ns, leaving roughly +8.97 ns of setup slack, meaning the highly parallel combinational logic easily resolves within a single cycle.
 
 **(b) Critical Path:**
-Because the HDC Binding Unit relies on a parallel 32-bit XOR array, the logic depth is incredibly shallow (only 2 logic levels). The critical path begins at the input control registers (e.g., `s_axi_valid`) and terminates at the output multiplexers/registers. The path is dominated by `sky130_fd_sc_hd__a211oi_2` (AND-OR-INV) and `sky130_fd_sc_hd__xnor2_2` cells.
+Because the HDC Binding Unit relies on a parallel 32-bit XOR array, the logic depth is extremely shallow. According to the ABC mapping, the critical path originates directly at the input port (`\s_axi_valid`) and terminates at an output multiplexer (`$auto$rtlil.cc:2739:MuxGate$204`). The path is dominated by `sky130_fd_sc_hd__a211oi_2` (AND-OR-INV) and `sky130_fd_sc_hd__xnor2_2` cells, proving the data path is fundamentally combinational between the AXI boundaries.
 
 **(c) Area and Top Contributors:**
-The core logic is highly efficient, utilizing only 132 total cells with a combined chip area of 1,924.35 µm². The top three contributors by instance count are:
-1. `sky130_fd_sc_hd__dfxtp_2` (D-Flip-Flops): 33 instances (36.5% of sequential area)
-2. `sky130_fd_sc_hd__a211oi_2` (AND-OR-Invert): 32 instances
-3. `sky130_fd_sc_hd__xnor2_2` (XNOR/XOR Logic): 32 instances
+The core logic utilizes 132 total cells with a combined chip area of 1,924.35 µm². The specific area breakdown of the footprint is:
+1. **Multi-Input Combinational:** 98 instances (dominated by `xnor` and `a211oi` cells) consuming the bulk of the area at **1,217.42 µm²**.
+2. **Sequential Cells:** 33 instances of `sky130_fd_sc_hd__dfxtp_2` flip-flops consuming **701.92 µm²**.
+3. **Buffers:** 1 instance consuming **5.00 µm²**.
 
 **(d) Violations and Warnings:**
-There were zero setup, hold, max slew, or max capacitance violations (all Passed). However, during floorplanning, the design triggered a `[PPL-0024]` error because it was "pin-bound." The 132 logic cells required so little physical silicon that OpenLane initially shrunk the die to 73x83µm, which physically lacked the perimeter to place the 102 AXI4 I/O pins. This was resolved by forcing an absolute die size of 150x150µm.
+There were zero setup, hold, max slew, or max capacitance violations (all Passed). However, during floorplanning, the design triggered a `[PPL-0024]` error because it was "pin-bound." The 132 logic cells required so little silicon that OpenLane dynamically shrunk the die to 73x83µm. This only provided a 313.74µm perimeter, which physically lacked the 346.80µm required to place the 102 AXI4 I/O pins. This was resolved by switching to `FP_SIZING: absolute` and forcing a 150x150µm die. This guaranteed a 600µm perimeter, easily accommodating all pin placements without DRC spacing issues.
