@@ -1,0 +1,3 @@
+## CF07 Update: Post-Synthesis Scope Confirmation
+**Date: May 15, 2026**
+The scope of the HDC co-processor remains fully viable and on track. The initial OpenLane 2 synthesis of the Binding Unit and AXI4-Lite interface proved that 1-bit precision HDC is extraordinarily hardware-efficient. The logic required only 132 standard cells (1,924 µm² area) and demonstrated roughly +8.9 ns of positive slack at a 100 MHz clock target. This massive margin confirms that the remaining M3 logic (bundling and similarity checks) can be integrated without exceeding edge-AI power, area, or timing constraints. The project scope remains unchanged.

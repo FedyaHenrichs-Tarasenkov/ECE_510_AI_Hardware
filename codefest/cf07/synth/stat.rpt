@@ -1,0 +1,25 @@
+108. Printing statistics.
+
+=== compute_core ===
+
+   Number of wires:                107
+   Number of wire bits:            200
+   Number of public wires:           9
+   Number of public wire bits:     102
+   Number of ports:                  9
+   Number of port bits:            102
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                132
+     sky130_fd_sc_hd__a211oi_2      32
+     sky130_fd_sc_hd__a21oi_2       32
+     sky130_fd_sc_hd__and2_2         1
+     sky130_fd_sc_hd__and2b_2        1
+     sky130_fd_sc_hd__buf_2          1
+     sky130_fd_sc_hd__dfxtp_2       33
+     sky130_fd_sc_hd__xnor2_2       32
+
+   Chip area for module '\compute_core': 1924.345600
+     of which used for sequential elements: 701.923200 (36.48%)
+

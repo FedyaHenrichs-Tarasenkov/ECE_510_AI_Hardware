@@ -1,0 +1,24 @@
+94. Printing statistics.
+
+=== compute_core ===
+
+   Number of wires:                 42
+   Number of wire bits:            135
+   Number of public wires:           9
+   Number of public wire bits:     102
+   Number of ports:                  9
+   Number of port bits:            102
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 66
+     $_AND_                          1
+     $_SDFFE_PP0P_                  32
+     $_SDFF_PP0_                     1
+     $_XOR_                         32
+
+   Area for cell type $_AND_ is unknown!
+   Area for cell type $_XOR_ is unknown!
+   Area for cell type $_SDFF_PP0_ is unknown!
+   Area for cell type $_SDFFE_PP0P_ is unknown!
+

@@ -1,0 +1,5 @@
+# M3 Synthesis Plan (Option A)
+
+For Milestone 3, I will be synthesizing the fully integrated HDC compute core. Because I successfully synthesized the Option A (Binding Unit) for this Codefest, I have confirmed that the 100 MHz (10.0 ns) clock target is highly viable. 
+
+Based on the synthesis report, the current 32-bit parallel XOR binding logic only consumes ~1.03 ns of the 10 ns clock period. For M3, I plan to integrate the Bundling Unit (bitwise accumulation) and the Similarity Check (Hamming distance). Because there is nearly 9 ns of positive slack remaining, I plan to keep the design strictly combinational between the bus boundaries rather than aggressively pipelining the data path. I will also retain the absolute die sizing constraint (150x150µm) to ensure the 102 I/O pins do not cause another PPL-0024 pin-bound failure as the logic scales.

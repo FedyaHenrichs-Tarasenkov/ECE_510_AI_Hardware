@@ -3,4 +3,5 @@ __pycache__/
 *.vcd
 *.sim
 sim
-.DS_Store
+.DS_Storecodefest/cf07/runs/
+codefest/cf07/runs/

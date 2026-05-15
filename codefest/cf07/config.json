@@ -4,5 +4,8 @@
         "dir::hdl/synth_top.sv"
     ],
     "CLOCK_PORT": "clk",
-    "CLOCK_PERIOD": 10.0
+    "CLOCK_PERIOD": 10.0,
+    "FP_SIZING": "absolute",
+    "DIE_AREA": [0, 0, 150, 150],
+    "CORE_AREA": [10, 10, 140, 140]
 }
