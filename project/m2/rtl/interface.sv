@@ -46,14 +46,27 @@ module axi_interface #(
     output logic [DATA_WIDTH-1:0]   rdata,
     output logic [1:0]              rresp,
     output logic                    rvalid,
-    input  logic                    rready
+    input  logic                    rready,
+
+    // ==========================================
+    // Application-Facing Ports (To Compute Core)
+    // ==========================================
+    output logic [DATA_WIDTH-1:0]   app_data_a,
+    output logic [DATA_WIDTH-1:0]   app_data_b,
+    output logic                    app_start,
+    input  logic [DATA_WIDTH-1:0]   app_data_out,
+    input  logic                    app_core_ready
 );
 
     // Internal Registers
     logic [DATA_WIDTH-1:0] reg_control;
     logic [DATA_WIDTH-1:0] reg_base_vec;
     logic [DATA_WIDTH-1:0] reg_feat_vec;
-    logic [DATA_WIDTH-1:0] reg_bound_vec;
+
+    // Continuous Assignments to Compute Core
+    assign app_data_a = reg_base_vec;
+    assign app_data_b = reg_feat_vec;
+    assign app_start  = reg_control[0];
 
     // Simplified AXI4-Lite Write Logic
     assign awready = 1'b1;
@@ -92,10 +105,11 @@ module axi_interface #(
             if (arvalid) begin
                 rvalid <= 1'b1;
                 case (araddr[7:0])
-                    8'h00: rdata <= reg_control;
+                    // Dynamically inject the core_ready status into bit 1
+                    8'h00: rdata <= {reg_control[31:2], app_core_ready, reg_control[0]};
                     8'h04: rdata <= reg_base_vec;
                     8'h08: rdata <= reg_feat_vec;
-                    8'h0C: rdata <= reg_bound_vec;
+                    8'h0C: rdata <= app_data_out; // Read directly from the compute core
                     default: rdata <= '0;
                 endcase
             end else if (rready && rvalid) begin
