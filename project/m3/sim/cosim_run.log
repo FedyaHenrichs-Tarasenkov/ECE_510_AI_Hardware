@@ -1,0 +1,3 @@
+VCD info: dumpfile project/m3/sim/cosim_waveform.vcd opened for output.
+PASS: Co-simulation output a5a5a5a5 matches expected a5a5a5a5
+project/m3/tb/tb_top.sv:162: $finish called at 205000 (1ps)
