@@ -1,30 +1,55 @@
-# HDC Accelerator Project Context
+HDC Accelerator Project Context
+User: Fyodor Henrichs-Tarasenkov
+Course: ECE 410/510 Hardware for AI and ML
+Current Phase: Milestone 3 (M3) Completed / Entering Milestone 4 (M4)
 
-**User:** Fedya Henrichs-Tarasenkov
-**Course:** ECE 410/510 Hardware for AI and ML
-**Current Phase:** Milestone 2 (M2) Completed / Entering Milestone 3 (M3)
+Architecture Overview
+Target Algorithm: Hyperdimensional Computing (HDC) Classifier.
 
-## Architecture Overview
-* **Target Algorithm:** Hyperdimensional Computing (HDC) Classifier.
-* **Application:** Ultra-low-power edge classification (real-time EMG gesture recognition).
-* **Hardware Paradigm:** Custom co-processor chiplet bypassing standard CPU memory bottlenecks via data localization.
-* **Vector Dimensions:** 10,000 dimensions per vector.
+Application: Ultra-low-power edge classification (real-time EMG gesture recognition).
 
-## Technical Specifications
-* **Precision:** Custom Binary (1-bit precision per dimension).
-* **Data Path:** Vectors are processed in 32-bit chunks per clock cycle (DATA_WIDTH = 32).
-* **Hardware Interface:** 32-bit AXI4-Lite bus running at 100 MHz.
-* **Bandwidth Capacity vs. Requirement:** 400 MB/s peak capacity versus 80 MB/s requirement for 2,000 samples/sec real-time throughput. 
+Hardware Paradigm: Custom co-processor chiplet bypassing standard CPU memory bottlenecks via data localization.
 
-## Core Hardware Units
-* **On-Chip Memory:** Item Memory (IMEM) for Base Vectors and Associative Memory (AMEM) for Class Vectors (DRAM Bypass).
-* **Binding Unit:** 32-bit parallel bitwise XOR array (Synthesized in M2).
-* **Bundling Unit:** Bitwise Accumulator / Majority Gate thresholding (Pending M3).
-* **Similarity Check:** Hamming Distance calculation (Pending M3).
+Vector Dimensions: 10,000 dimensions per vector.
 
-## Current Project Status
-* **M1:** Software Baseline (309k samples/sec) & Roofline analysis completed. 
-* **Codefest 4:** Initial `cocotb` transition completed.
-* **M2:** RTL for Compute Core (Binding Unit) and AXI4-Lite Interface fully implemented in synthesizable SystemVerilog.
-* **M2 Verification:** Both modules verified using Icarus Verilog testbenches. Handshakes and data integrity confirmed with generated logs and GTKWave waveforms.
-* **Precision Justification:** 1-bit binary precision formally analyzed, yielding a 32x memory compression factor with an acceptable -2.3% accuracy delta.
+Technical Specifications
+Precision: Custom Binary (1-bit precision per dimension).
+
+Data Path: Vectors are processed in 32-bit chunks (DATA_WIDTH = 32).
+
+Hardware Interface: Integrated AXI4-Lite slave interface running at 100 MHz.
+
+Physical Constraints: Absolute die sizing (250x250 µm) to mitigate pin-bound limitations.
+
+Core Hardware Units
+On-Chip Memory: Item Memory (IMEM) for Base Vectors and Associative Memory (AMEM) for Class Vectors (DRAM Bypass).
+
+Binding Unit: 32-bit parallel bitwise XOR array (Synthesized, M2).
+
+Bundling Unit: Bitwise Accumulator / Majority Gate thresholding (Pending M4).
+
+Similarity Check: Hamming Distance calculation (Pending M4).
+
+Project Status
+M1: Software Baseline & Roofline analysis completed.
+
+M2: RTL for Binding Unit and AXI4-Lite Interface fully implemented in synthesizable SystemVerilog.
+
+M3: * Successful full-chip integration (top.sv).
+
+Full end-to-end co-simulation passed (PASS in cosim_run.log).
+
+Synthesis flow completed via OpenLane 2 (absolute die size: 250x250 µm, clock: 100 MHz).
+
+Antenna violations documented in synthesis_notes.md.
+
+Critical path analysis identified reset fanout as the primary bottleneck.
+
+Next Steps for Milestone 4
+Implement and integrate the Bundling Unit (Bitwise Accumulator / Majority Gate).
+
+Implement the final Similarity Check (Hamming Distance) stage.
+
+Perform full power/area/performance (PPA) benchmarking using the M1 software baseline as the point of comparison.
+
+Resolve any outstanding LVS/DRC or antenna issues through iterative floorplan adjustment.
