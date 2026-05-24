@@ -10,13 +10,11 @@ module tb_top();
 
     // AXI Write Address
     logic [31:0] awaddr;
-    logic [2:0]  awprot;
     logic        awvalid;
     logic        awready;
 
     // AXI Write Data
     logic [31:0] wdata;
-    logic [3:0]  wstrb;
     logic        wvalid;
     logic        wready;
 
@@ -27,13 +25,12 @@ module tb_top();
 
     // AXI Read Address
     logic [31:0] araddr;
-    logic [2:0]  arprot;
     logic        arvalid;
     logic        arready;
 
     // AXI Read Data
     logic [31:0] rdata;
-    logic [2:0]  rresp;
+    logic [1:0]  rresp;
     logic        rvalid;
     logic        rready;
 
@@ -43,10 +40,10 @@ module tb_top();
     top dut (
         .clk(clk),
         .axi_aresetn(axi_aresetn),
-        .awaddr(awaddr), .awprot(awprot), .awvalid(awvalid), .awready(awready),
-        .wdata(wdata), .wstrb(wstrb), .wvalid(wvalid), .wready(wready),
+        .awaddr(awaddr), .awvalid(awvalid), .awready(awready),
+        .wdata(wdata), .wvalid(wvalid), .wready(wready),
         .bresp(bresp), .bvalid(bvalid), .bready(bready),
-        .araddr(araddr), .arprot(arprot), .arvalid(arvalid), .arready(arready),
+        .araddr(araddr), .arvalid(arvalid), .arready(arready),
         .rdata(rdata), .rresp(rresp), .rvalid(rvalid), .rready(rready)
     );
 
@@ -67,7 +64,6 @@ module tb_top();
             awvalid <= 1'b1;
             wdata   <= data;
             wvalid  <= 1'b1;
-            wstrb   <= 4'hF; // Write all 4 bytes
             
             // Wait for slave to accept address and data
             wait(awready && wready);
@@ -118,10 +114,10 @@ module tb_top();
         // Initialize signals
         clk = 0;
         axi_aresetn = 0;
-        awaddr = 0; awprot = 0; awvalid = 0;
-        wdata = 0; wstrb = 0; wvalid = 0;
+        awaddr = 0; awvalid = 0;
+        wdata = 0; wvalid = 0;
         bready = 0;
-        araddr = 0; arprot = 0; arvalid = 0;
+        araddr = 0; arvalid = 0;
         rready = 0;
 
         // Apply Reset (Active Low)
