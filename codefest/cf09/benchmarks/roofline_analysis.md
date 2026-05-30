@@ -1,0 +1,5 @@
+# Roofline Diagnostic Analysis
+
+There is a noticeable performance gap between the projected hardware throughput (1.6 GOPS) and the hardware's theoretical compute ceiling (3.2 GOPS). Because the architecture's maximum Arithmetic Intensity is only 4.0 BOPs/Byte, the system falls into the memory-bound region of the roofline. The 32-bit AXI4-Lite interface operating at 100 MHz simply cannot feed the parallel XOR gates fast enough. Consequently, the projected hardware throughput is actually lower than the M1 software baseline (2.65 GOPS). 
+
+Because these figures represent a projected path rather than a cycle-accurate testbench measurement, the dominant uncertainty is the AXI protocol overhead. The projection assumes 100% bus utilization, but realistic handshaking (valid/ready latency) will likely lower the actual memory bandwidth below 0.4 GB/s. To convert this projection to a reliable measurement, full system-level tracing of the AXI BFMs is required to quantify idle cycles.
