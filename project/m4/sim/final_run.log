@@ -1,0 +1,17 @@
+VCD info: dumpfile project/m4/sim/final_waveform.vcd opened for output.
+
+=======================================================
+--- Starting M4 Integration Test (Full HDC Pipeline) ---
+=======================================================
+
+[TB] 1. Clearing Accumulator and Class RAMs...
+[TB] 2. Streaming Vector 1 for Accumulation (313 chunks)...
+[TB] 3. Thresholding Accumulator to Class RAM (Majority Gate)...
+[TB] 4. Streaming Vector 2 for Similarity Check...
+[TB] 5. Reading Final Hamming Distance...
+
+=======================================================
+PASS: M4 Pipeline HD Output 5008 matches expected 5008
+=======================================================
+
+m4/tb/tb_top.sv:182: $finish called at 125585000 (1ps)
