@@ -1,89 +1,52 @@
+`timescale 1ns / 1ps
+
 /* -----------------------------------------------------------------------------
  * File:        top.sv
- * Description: Integrated Top-Level Module for the HDC Edge AI Accelerator.
+ * Description: Integrated Top-Level Module for the AXI-Stream HDC Accelerator.
  * ----------------------------------------------------------------------------- */
 
 module top (
     input  logic        clk,
-    input  logic        axi_aresetn,
+    input  logic        rst,
 
-    input  logic [31:0] awaddr,
-    input  logic        awvalid,
-    output logic        awready,
+    // AXI-Stream Slave (Inbound from Host)
+    input  logic        s_axis_tvalid,
+    input  logic [95:0] s_axis_tdata,
+    input  logic        s_axis_tlast,
+    output logic        s_axis_tready,
 
-    input  logic [31:0] wdata,
-    input  logic        wvalid,
-    output logic        wready,
-
-    output logic [1:0]  bresp,
-    output logic        bvalid,
-    input  logic        bready,
-
-    input  logic [31:0] araddr,
-    input  logic        arvalid,
-    output logic        arready,
-
-    output logic [31:0] rdata,
-    output logic [1:0]  rresp,
-    output logic        rvalid,
-    input  logic        rready
+    // AXI-Stream Master (Outbound to Host)
+    output logic        m_axis_tvalid,
+    output logic [95:0] m_axis_tdata,
+    output logic        m_axis_tlast,
+    input  logic        m_axis_tready
 );
 
-    logic core_rst;
-    assign core_rst = ~axi_aresetn;
+    // Instantiate the interfaces defined in interface.sv
+    axis_if #(.DATA_WIDTH(96)) s_intf();
+    axis_if #(.DATA_WIDTH(96)) m_intf();
 
-    logic        intf_to_core_valid;
-    logic [31:0] intf_to_core_ctrl; // NEW
-    logic [31:0] intf_to_core_data_a;
-    logic [31:0] intf_to_core_data_b;
-    logic        core_to_intf_ready;
-    logic        core_to_intf_valid;
-    logic [31:0] core_to_intf_data;
-    logic        intf_to_core_ready;
+    // Bind inbound top-level ports to the slave interface
+    assign s_intf.tvalid = s_axis_tvalid;
+    assign s_intf.tdata  = s_axis_tdata;
+    assign s_intf.tlast  = s_axis_tlast;
+    assign s_axis_tready = s_intf.tready;
 
-    assign intf_to_core_ready = 1'b1;
+    // Bind outbound top-level ports to the master interface
+    assign m_axis_tvalid = m_intf.tvalid;
+    assign m_axis_tdata  = m_intf.tdata;
+    assign m_axis_tlast  = m_intf.tlast;
+    assign m_intf.tready = m_axis_tready;
 
-    axi_interface intf_inst (
+    // Instantiate the compute core
+    compute_core #(
+        .NUM_CHUNKS(32),       // 1024 dimensions
+        .COUNTER_WIDTH(10)     // Max bundle count of 1023
+    ) core_inst (
         .clk(clk),
-        .axi_aresetn(axi_aresetn),
-        .awaddr(awaddr),
-        .awvalid(awvalid),
-        .awready(awready),
-        .wdata(wdata),
-        .wvalid(wvalid),
-        .wready(wready),
-        .bresp(bresp),
-        .bvalid(bvalid),
-        .bready(bready),
-        .araddr(araddr),
-        .arvalid(arvalid),
-        .arready(arready),
-        .rdata(rdata),
-        .rresp(rresp),
-        .rvalid(rvalid),
-        .rready(rready),
-
-        .app_ctrl(intf_to_core_ctrl), // NEW
-        .app_start(intf_to_core_valid),       
-        .app_core_ready(core_to_intf_ready),  
-        .app_data_a(intf_to_core_data_a),     
-        .app_data_b(intf_to_core_data_b),     
-        .app_data_out(core_to_intf_data)      
-    );
-
-    compute_core core_inst (
-        .clk(clk),
-        .rst(core_rst),
-        
-        .s_axi_ctrl(intf_to_core_ctrl), // NEW
-        .s_axi_valid(intf_to_core_valid),
-        .s_axi_data_a(intf_to_core_data_a),
-        .s_axi_data_b(intf_to_core_data_b),
-        .s_axi_ready(core_to_intf_ready),
-        
-        .m_axi_valid(core_to_intf_valid),
-        .m_axi_data(core_to_intf_data),
-        .m_axi_ready(intf_to_core_ready)
+        .rst(rst),
+        .s_axis(s_intf.slave),
+        .m_axis(m_intf.master)
     );
 
 endmodule
