@@ -1,17 +1,19 @@
 {
     "DESIGN_NAME": "top",
     "VERILOG_FILES": [
-        "dir::../rtl/top.sv",
+        "dir::../rtl/interface.sv",
         "dir::../rtl/compute_core.sv",
-        "dir::../rtl/interface.sv"
+        "dir::../rtl/top.sv"
     ],
     "CLOCK_PORT": "clk",
     "CLOCK_PERIOD": 10.0,
     "FP_SIZING": "absolute",
     "DIE_AREA": "0 0 1000 1000",
-    "PL_TARGET_DENSITY": 0.40,
+    "PL_TARGET_DENSITY_PCT": 55,
     "VDD_NETS": ["vccd1"],
     "GND_NETS": ["vssd1"],
-    "ROUTING_CORES": 8,
-    "VSRC_LOC_FILES": "dir::../synth/vsrc.tcl"
+    "DRT_THREADS": 4,
+    "VSRC_LOC_FILES": {
+        "*": "dir::vsrc.tcl"
+    }
 }

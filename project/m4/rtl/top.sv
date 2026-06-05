@@ -1,10 +1,5 @@
 `timescale 1ns / 1ps
 
-/* -----------------------------------------------------------------------------
- * File:        top.sv
- * Description: Integrated Top-Level Module for the AXI-Stream HDC Accelerator.
- * ----------------------------------------------------------------------------- */
-
 module top (
     input  logic        clk,
     input  logic        rst,
@@ -22,31 +17,48 @@ module top (
     input  logic        m_axis_tready
 );
 
-    // Instantiate the interfaces defined in interface.sv
-    axis_if #(.DATA_WIDTH(96)) s_intf();
-    axis_if #(.DATA_WIDTH(96)) m_intf();
+    // Internal wires connecting the interface to the compute core
+    logic        core_s_valid, core_s_last, core_s_ready;
+    logic [95:0] core_s_data;
+    
+    logic        core_m_valid, core_m_last, core_m_ready;
+    logic [95:0] core_m_data;
 
-    // Bind inbound top-level ports to the slave interface
-    assign s_intf.tvalid = s_axis_tvalid;
-    assign s_intf.tdata  = s_axis_tdata;
-    assign s_intf.tlast  = s_axis_tlast;
-    assign s_axis_tready = s_intf.tready;
+    stream_interface #(.DATA_WIDTH(96)) intf_inst (
+        .ext_s_tvalid(s_axis_tvalid),
+        .ext_s_tdata(s_axis_tdata),
+        .ext_s_tlast(s_axis_tlast),
+        .ext_s_tready(s_axis_tready),
+        .ext_m_tvalid(m_axis_tvalid),
+        .ext_m_tdata(m_axis_tdata),
+        .ext_m_tlast(m_axis_tlast),
+        .ext_m_tready(m_axis_tready),
+        
+        .core_s_tvalid(core_s_valid),
+        .core_s_tdata(core_s_data),
+        .core_s_tlast(core_s_last),
+        .core_s_tready(core_s_ready),
+        .core_m_tvalid(core_m_valid),
+        .core_m_tdata(core_m_data),
+        .core_m_tlast(core_m_last),
+        .core_m_tready(core_m_ready)
+    );
 
-    // Bind outbound top-level ports to the master interface
-    assign m_axis_tvalid = m_intf.tvalid;
-    assign m_axis_tdata  = m_intf.tdata;
-    assign m_axis_tlast  = m_intf.tlast;
-    assign m_intf.tready = m_axis_tready;
-
-    // Instantiate the compute core
     compute_core #(
         .NUM_CHUNKS(32),       // 1024 dimensions
-        .COUNTER_WIDTH(10)     // Max bundle count of 1023
+        .COUNTER_WIDTH(10)
     ) core_inst (
         .clk(clk),
         .rst(rst),
-        .s_axis(s_intf.slave),
-        .m_axis(m_intf.master)
+        .s_axis_tvalid(core_s_valid),
+        .s_axis_tdata(core_s_data),
+        .s_axis_tlast(core_s_last),
+        .s_axis_tready(core_s_ready),
+        
+        .m_axis_tvalid(core_m_valid),
+        .m_axis_tdata(core_m_data),
+        .m_axis_tlast(core_m_last),
+        .m_axis_tready(core_m_ready)
     );
 
 endmodule
