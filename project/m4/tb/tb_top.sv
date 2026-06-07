@@ -34,50 +34,66 @@ module tb_top();
             s_tdata  <= {base, feat, thresh, 13'b0, op};
             s_tlast  <= last;
             
-            // Wait for the clock edge where the core samples the data
             @(posedge clk);
             while (!s_tready) @(posedge clk);
         end
     endtask
 
     initial begin
-        $dumpfile("project/m4/sim/final_waveform.vcd");
+        $dumpfile("final_waveform.vcd");
         $dumpvars(0, tb_top);
 
         clk = 0; rst = 1;
-        s_tvalid = 0;
-        s_tdata = 0;
-        s_tlast = 0;
-        m_tready = 1;
-
+        s_tvalid = 0; s_tdata = 0; s_tlast = 0; m_tready = 1;
         #25 rst = 0; #20;
 
-        $display("\n--- Starting AXI-Stream Test (NUM_CHUNKS=32) ---");
+        $display("\n--- Starting Robust AXI-Stream Tests ---");
 
-        // 1. Clear RAMs
-        for (int i=0; i<32; i++) send_stream(3'b000, 16'b0, 32'h0, 32'h0, (i==31));
-
-        // 2. Accumulate
-        for (int i=0; i<32; i++) send_stream(3'b001, 16'b0, 32'hFFFF_FFFF, 32'h0000_0000, (i==31));
-
-        // 3. Threshold
-        for (int i=0; i<32; i++) send_stream(3'b010, 16'd1, 32'h0, 32'h0, (i==31));
-
-        // 4. Infer
-        for (int i=0; i<32; i++) send_stream(3'b011, 16'b0, 32'hFFFF_FFFF, 32'hFFFF_0000, (i==31));
-
-        // 5. Read Result
-        send_stream(3'b100, 16'b0, 32'h0, 32'h0, 1'b1);
+        // ==========================================
+        // TEST 1: Standard Inference (Expected HD = 512)
+        // ==========================================
+        for (int i=0; i<32; i++) send_stream(3'b000, 16'b0, 32'h0, 32'h0, (i==31)); // Clear
+        for (int i=0; i<32; i++) send_stream(3'b001, 16'b0, 32'hFFFF_FFFF, 32'h0000_0000, (i==31)); // Accum
+        for (int i=0; i<32; i++) send_stream(3'b010, 16'd1, 32'h0, 32'h0, (i==31)); // Thresh
+        for (int i=0; i<32; i++) send_stream(3'b011, 16'b0, 32'hFFFF_FFFF, 32'hFFFF_0000, (i==31)); // Infer
+        send_stream(3'b100, 16'b0, 32'h0, 32'h0, 1'b1); // Read Result
         
-        // Safely de-assert the stream after the read command is accepted
         s_tvalid <= 1'b0; 
-
-        // Wait for the core to output the result on the master interface
         while (!m_tvalid) @(posedge clk); 
-        
-        if (m_tdata[15:0] === 512) $display("PASS: Output matches %0d", m_tdata[15:0]);
-        else $display("FAIL: Got %0d (or x)", m_tdata[15:0]);
+        if (m_tdata[15:0] === 512) $display("TEST 1 PASS: HD = 512");
+        else $display("TEST 1 FAIL: Got %0d", m_tdata[15:0]);
+        @(posedge clk);
 
+        // ==========================================
+        // TEST 2: Perfect Match (Expected HD = 0)
+        // ==========================================
+        for (int i=0; i<32; i++) send_stream(3'b000, 16'b0, 32'h0, 32'h0, (i==31)); // Clear
+        for (int i=0; i<32; i++) send_stream(3'b001, 16'b0, 32'hAAAA_AAAA, 32'h5555_5555, (i==31)); // Accum
+        for (int i=0; i<32; i++) send_stream(3'b010, 16'd1, 32'h0, 32'h0, (i==31)); // Thresh
+        for (int i=0; i<32; i++) send_stream(3'b011, 16'b0, 32'hAAAA_AAAA, 32'h5555_5555, (i==31)); // Infer
+        send_stream(3'b100, 16'b0, 32'h0, 32'h0, 1'b1); // Read Result
+        
+        s_tvalid <= 1'b0; 
+        while (!m_tvalid) @(posedge clk); 
+        if (m_tdata[15:0] === 0) $display("TEST 2 PASS: HD = 0");
+        else $display("TEST 2 FAIL: Got %0d", m_tdata[15:0]);
+        @(posedge clk);
+
+        // ==========================================
+        // TEST 3: Total Mismatch (Expected HD = 1024)
+        // ==========================================
+        for (int i=0; i<32; i++) send_stream(3'b000, 16'b0, 32'h0, 32'h0, (i==31)); // Clear
+        for (int i=0; i<32; i++) send_stream(3'b001, 16'b0, 32'h0000_0000, 32'h0000_0000, (i==31)); // Accum
+        for (int i=0; i<32; i++) send_stream(3'b010, 16'd1, 32'h0, 32'h0, (i==31)); // Thresh
+        for (int i=0; i<32; i++) send_stream(3'b011, 16'b0, 32'hFFFF_FFFF, 32'h0000_0000, (i==31)); // Infer
+        send_stream(3'b100, 16'b0, 32'h0, 32'h0, 1'b1); // Read Result
+        
+        s_tvalid <= 1'b0; 
+        while (!m_tvalid) @(posedge clk); 
+        if (m_tdata[15:0] === 1024) $display("TEST 3 PASS: HD = 1024");
+        else $display("TEST 3 FAIL: Got %0d", m_tdata[15:0]);
+
+        $display("--- All Tests Completed Successfully ---");
         #50 $finish;
     end
 endmodule

@@ -1,5 +1,8 @@
-VCD info: dumpfile project/m4/sim/final_waveform.vcd opened for output.
+VCD info: dumpfile final_waveform.vcd opened for output.
 
---- Starting AXI-Stream Test (NUM_CHUNKS=32) ---
-PASS: Output matches 512
-m4/tb/tb_top.sv:81: $finish called at 1385000 (1ps)
+--- Starting Robust AXI-Stream Tests ---
+TEST 1 PASS: HD = 512
+TEST 2 PASS: HD = 0
+TEST 3 PASS: HD = 1024
+--- All Tests Completed Successfully ---
+m4/tb/tb_top.sv:97: $finish called at 4005000 (1ps)

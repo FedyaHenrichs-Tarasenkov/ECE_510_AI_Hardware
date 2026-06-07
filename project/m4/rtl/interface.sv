@@ -1,3 +1,12 @@
+// ==============================================================================
+// Author:       Fedya Henrichs-Tarasenkov
+// Course:       ECE 410/510
+// Project:      Milestone 4 - HDC Edge Accelerator
+// Description:  Flattened 96-bit AXI-Stream interface pass-through bridge.
+//               Strips AXI4-Lite handshake overhead to maximize memory bandwidth
+//               and directly feed the compute core.
+// ==============================================================================
+
 `timescale 1ns / 1ps
 
 module stream_interface #(

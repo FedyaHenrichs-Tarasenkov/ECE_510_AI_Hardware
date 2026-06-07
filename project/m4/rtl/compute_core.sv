@@ -1,3 +1,12 @@
+// ==============================================================================
+// Author:       Fedya Henrichs-Tarasenkov
+// Course:       ECE 410/510 
+// Project:      Milestone 4 - HDC Edge Accelerator
+// Description:  5-stage Output-Stationary Finite State Machine for calculating
+//               Hyperdimensional Computing (HDC) binding, bundling, and 
+//               Majority Gate thresholding. Accumulates 1,024-dimension vectors.
+// ==============================================================================
+
 `timescale 1ns / 1ps
 
 module compute_core #(
@@ -30,6 +39,8 @@ module compute_core #(
     logic [31:0] feat_vec;
     logic [15:0] threshold_val;
     logic [2:0]  opcode;
+    logic [9:0] safe_thresh;
+    assign safe_thresh = threshold_val[9:0];
 
     assign base_vec      = s_axis_tdata[95:64];
     assign feat_vec      = s_axis_tdata[63:32];
@@ -62,7 +73,7 @@ module compute_core #(
             // Explicit sizing prevents 'x' propagation
             next_accum[i*10 +: 10] = current_accum[i*10 +: 10] + {9'b0, bound_chunk[i]};
             
-            if (current_accum[i*10 +: 10] >= threshold_val[9:0]) begin
+            if (current_accum[i*10 +: 10] >= safe_thresh) begin
                 thresh_chunk[i] = 1'b1;
             end else begin
                 thresh_chunk[i] = 1'b0;

@@ -1,3 +1,12 @@
+// ==============================================================================
+// Author:       Fedya Henrichs-Tarasenkov
+// Course:       ECE 410/510
+// Project:      Milestone 4 - HDC Edge Accelerator
+// Description:  End-to-end transaction co-simulation testbench. Validates the 
+//               AXI-Stream interface against three continuous corner cases:
+//               Standard Inference, Perfect Match, and Total Mismatch.
+// ==============================================================================
+
 `timescale 1ns / 1ps
 
 module top (

@@ -1,0 +1,8 @@
+Metric,M1 Software Baseline,M4 Hardware Accelerator,Unit
+Operating Frequency,3200,141.2,MHz
+Dimensionality,10000,1024,Dimensions
+Data Width,32,32,Bits
+Operations per Cycle,N/A,32,Ops/Cycle
+Measured Throughput,2.65,4.51,GOPS
+Power Consumption,15000,87.8,mW
+Energy Efficiency,0.17,51.36,GOPS/W
